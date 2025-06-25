@@ -15,9 +15,12 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 openai.api_key = OPENAI_API_KEY
 
-
 # === /start ===
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.message is None:
+        return
+
+    print("✅ /start diterima")
     try:
         res = requests.get("https://api.waifu.pics/sfw/waifu").json()
         waifu_image_url = res["url"]
@@ -42,6 +45,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # === /waifu ===
 async def waifu(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.message is None:
+        return
+
+    print("✅ /waifu diterima")
     try:
         res = requests.get("https://api.waifu.pics/sfw/waifu").json()
         await update.message.reply_photo(photo=res["url"], caption="Here's your waifu 💖")
@@ -51,6 +58,10 @@ async def waifu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # === /meme ===
 async def meme(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.message is None:
+        return
+
+    print("✅ /meme diterima")
     try:
         res = requests.get("https://meme-api.com/gimme").json()
         title = res.get("title")
@@ -64,6 +75,10 @@ async def meme(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # === /translate <teks> ===
 async def translate(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.message is None:
+        return
+
+    print("✅ /translate diterima")
     if not context.args:
         await update.message.reply_text("Gunakan format: /translate <teks>")
         return
@@ -83,6 +98,10 @@ async def translate(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # === AI reply (tanpa command) ===
 async def ai_reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.message is None:
+        return
+
+    print("💬 Pesan masuk untuk GPT:", update.message.text)
     if not OPENAI_API_KEY:
         await update.message.reply_text("AI tidak aktif karena OPENAI_API_KEY belum diset.")
         return
@@ -101,6 +120,7 @@ async def ai_reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(reply_text.strip())
     except Exception as e:
         await update.message.reply_text("❌ Gagal mendapatkan respons dari GPT.")
+        print("❌ GPT Error:", e)
 
 
 # === Fungsi untuk mendaftarkan semua handler ===
