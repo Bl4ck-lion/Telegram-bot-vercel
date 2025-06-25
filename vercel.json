@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "main.py",
+      "src": "asgi.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/webhook/.*",
-      "dest": "main.py"
+      "dest": "asgi.py"
     }
   ]
 }
